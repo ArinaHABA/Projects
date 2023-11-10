@@ -16,7 +16,7 @@ LEFT JOIN (SELECT country, COUNT(customer_id) AS total_customer
 FROM client
 GROUP BY country) AS table_2
 ON table_1.country = table_2.country
-ORDER BY total_invoice DESC, table_1.country
+ORDER BY total_invoice DESC, table_1.country;
 
 
 №2
@@ -36,7 +36,7 @@ SELECT year_2012.Month,
 year_2012.sum_total_2012, year_2013.sum_total_2013,
 ROUND((year_2013.sum_total_2013 - year_2012.sum_total_2012)*100/year_2012.sum_total_2012) AS perc
 FROM year_2012 LEFT JOIN year_2013 ON year_2012.Month=year_2013.Month
-ORDER BY Month
+ORDER BY Month;
 
 
 №3
@@ -48,4 +48,20 @@ WHERE EXTRACT(year from CAST(invoice_date as date)) = '2009'
 GROUP BY billing_country, EXTRACT(month from CAST(invoice_date as date)), billing_country) AS More
 WHERE date_part IN (2,5,7,10)
 GROUP BY billing_country
-HAVING SUM(AVGG) > 10
+HAVING SUM(AVGG) > 10;
+
+
+№4
+select client_id,
+	   case 
+	   	when "action" like '%visit%'
+	   	then hitdatetime 
+	   	else null
+	   	end as visit_dt,
+	   case
+	   	when "action" like '%registration%'
+	   	then 1
+	   	else 0
+	   end as is_registration
+	   from user_activity_log
+limit 10;
