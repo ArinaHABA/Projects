@@ -65,3 +65,16 @@ select client_id,
 	   end as is_registration
 	   from user_activity_log
 limit 10;
+
+
+№5 
+SELECT client_id, cast(date_trunc('Month', hitdatetime) as date) as month,
+COUNT(CASE WHEN action = 'login' THEN 1 END) visit_to_login_events 
+FROM
+  (SELECT client_id,
+          hitdatetime,
+          action,
+          lag(hitdatetime) OVER (PARTITION BY client_id
+                                 ORDER BY hitdatetime) prev_hitdatetime
+   FROM user_activity_log)t
+GROUP BY client_id, CAST(DATE_TRUNC('Month', hitdatetime) as date);
